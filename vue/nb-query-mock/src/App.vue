@@ -19,24 +19,30 @@
           <div class="row">
             <form method="post">
               <div class="form-row row">
-                <div class="form-group col-md-6"></div>
-                <label class="form-label">Age lower</label>
-                <input
-                  type="number"
-                  name="age_lower"
-                  step="any"
-                  class="numberinput form-control"
-                />
-                <div class="form-group col-md-6"></div>
-                <label class="form-label">Age upper</label>
-                <input
-                  type="number"
-                  name="age_upper"
-                  step="any"
-                  class="numberinput form-control"
-                />
+                <div class="form-group col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Age lower</label>
+                    <input
+                      type="number"
+                      name="age_lower"
+                      step="any"
+                      class="numberinput form-control"
+                    />
+                  </div>
+                </div>
+                <div class="form-group col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Age upper</label>
+                    <input
+                      type="number"
+                      name="age_upper"
+                      step="any"
+                      class="numberinput form-control"
+                    />
+                  </div>
+                </div>
               </div>
-              <div>
+              <div class="mb-3">
                 <label class="form-label">Sex</label>
                 <select type="sex" class="select form-select">
                   <option value selected>All</option>
@@ -44,9 +50,10 @@
                   <option>male</option>
                 </select>
               </div>
-              <div>
+              <div class="mb-3">
                 <label class="form-label">Modality</label>
                 <select type="modality" class="select form-select">
+                  <option value selected>All</option>
                   <option>Diffusion weighted</option>
                   <option>EEG</option>
                   <option>Flow weighted</option>
@@ -54,21 +61,21 @@
                   <option>T2 weighted</option>
                 </select>
               </div>
-              <div>
+              <div class="mb-3">
                 <label class="form-label">Diagnosis</label>
                 <select name="diagnosis" class="select form-select">
-                  <option>All</option>
+                  <option value selected>All</option>
                   <option>Parkinson's disease</option>
                 </select>
               </div>
-              <div>
+              <div class="mb-3">
                 <label class="form-label">Is control</label>
                 <select name="is_control" class="select form-select">
-                  <option>All</option>
-                  <option>control</option>
+                  <option value selected>All</option>
+                  <option>Control</option>
                 </select>
               </div>
-              <div>
+              <div class="mb-3">
                 <label class="form-label">Num sessions</label>
                 <input
                   type="numebr"
@@ -109,15 +116,6 @@ export default {
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-
 /*
 
 Author: Jonathan Armoza
