@@ -11,6 +11,10 @@ BOOKS = {
 }
 
 @app.get("/")
-async def return_books():
+async def read_books():
     return BOOKS
+
+@app.get("/books/{book_id}")
+async def get_book(book_id: str):
+    return BOOKS[book_id]
      
