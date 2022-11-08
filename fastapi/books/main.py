@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from models import Directions
 
 app = FastAPI()
 
@@ -17,4 +18,15 @@ async def read_books():
 @app.get("/books/{book_id}")
 async def get_book(book_id: str):
     return BOOKS[book_id]
+
+@app.get("directions/{name}")
+async def get_direction(name: Directions):
+    if name == Directions.north:
+        return {"Direction": name, "sub": 'Up'}
+    if name == Directions.south:
+        return {"Direction": name, "sub": 'Down'}
+    if name == Directions.east:
+        return {"Direction": name, "sub": 'Right'}
+    if name == Directions.west:
+        return {"Direction": name, "sub": 'Left'}
      
