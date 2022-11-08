@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from typing import Optional
 from models import Directions
 
 app = FastAPI()
@@ -29,4 +30,10 @@ async def get_direction(name: Directions):
         return {"Direction": name, "sub": 'Right'}
     if name == Directions.west:
         return {"Direction": name, "sub": 'Left'}
-     
+
+@app.get("/skip_book")
+async def skip_book(book_id: Optional[str]):
+    if book_id:
+        new_books = BOOKS.copy()
+        del new_books[book_id]
+        return new_books
