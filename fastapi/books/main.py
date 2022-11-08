@@ -31,7 +31,7 @@ async def get_direction(name: Directions):
     if name == Directions.west:
         return {"Direction": name, "sub": 'Left'}
 
-@app.get("/skip_book")
+@app.get("/skip_book/")
 async def skip_book(book_id: Optional[str]):
     if book_id:
         new_books = BOOKS.copy()
