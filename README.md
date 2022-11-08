@@ -1,1 +1,1 @@
-JavaScript Sandbox
+Sandbox
