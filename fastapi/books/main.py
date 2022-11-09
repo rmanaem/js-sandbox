@@ -1,18 +1,44 @@
 from fastapi import FastAPI
 from typing import Optional
+from uuid import UUID
 from models import Directions, Book
 
 app = FastAPI()
 
-BOOKS = []
+BOOKS = [
+    Book(id="71f4c2ea-1340-41f4-89f7-2852347bb0d1",
+                  title="Title 1",
+                  author="Author 1",
+                  description="Description 1",
+                  rating=60),
+    Book(id="21f4c2ea-1340-41f4-89f7-2852347bb0d1",
+                  title="Title 2",
+                  author="Author 2",
+                  description="Description 2",
+                  rating=70),
+    Book(id="31f4c2ea-1340-41f4-89f7-2852347bb0d1",
+                  title="Title 3",
+                  author="Author 3",
+                  description="Description 3",
+                  rating=80),
+    Book(id="41f4c2ea-1340-41f4-89f7-2852347bb0d1",
+                  title="Title 4",
+                  author="Author 4",
+                  description="Description 4",
+                  rating=90)
+]
 
 @app.get("/")
 async def get_all_books():
     return BOOKS
 
-@app.get("/books/{book_id}")
-async def get_book(book_id: str):
-    return BOOKS[book_id]
+@app.get("/book/{book_id}")
+async def get_book(book_id : UUID):
+    for b in BOOKS:
+        if b.id == book_id:
+            return b
+    return f'Book by id:{book_id} was not found.'
+        
 
 @app.get("directions/{name}")
 async def get_direction(name: Directions):
