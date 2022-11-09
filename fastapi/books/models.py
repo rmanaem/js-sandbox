@@ -3,12 +3,6 @@ from pydantic import BaseModel, Field
 from typing import Optional
 from uuid import UUID
 
-class Directions(str, Enum):
-    north = "North"
-    south = "South"
-    east = "East"
-    west = "West"
-
 class Book(BaseModel):
     id : UUID
     title : str = Field(min_length=1)
@@ -26,3 +20,17 @@ class Book(BaseModel):
                 "rating": 75
             }
         }
+
+
+class BookNoRating(BaseModel):
+    id: UUID
+    title: str = Field(min_length=1)
+    author: str
+    description: Optional[str] = Field(None, title="Description of the book", min_length=1, max_length=100)
+    
+
+class Directions(str, Enum):
+    north = "North"
+    south = "South"
+    east = "East"
+    west = "West"
