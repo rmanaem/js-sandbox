@@ -65,9 +65,14 @@ async def create_book(book: Book):
     return book
 
 @app.put("/{book_id}")
-async def update_book(book_id: str, book_title: str, book_author: str):
-    BOOKS[book_id] = {'title': book_title, 'author': book_author}
-    return BOOKS[book_id]
+async def update_book(book_id: UUID, book: Book):
+    i = 0
+    for b in BOOKS:
+        if b.id == book_id:
+            BOOKS[i] = book
+            return BOOKS[i]
+        i += 1            
+    return f'Book by id:{book_id} was not found'
 
 @app.delete('/{book_id}')
 async def delete_book(book_id):
