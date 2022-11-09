@@ -37,7 +37,8 @@ async def get_book(book_id : UUID):
     for b in BOOKS:
         if b.id == book_id:
             return b
-    return f'Book by id:{book_id} was not found.'
+
+    return f'Book with id:{book_id} was not found.'
         
 
 @app.get("directions/{name}")
@@ -71,10 +72,18 @@ async def update_book(book_id: UUID, book: Book):
         if b.id == book_id:
             BOOKS[i] = book
             return BOOKS[i]
-        i += 1            
-    return f'Book by id:{book_id} was not found'
+        i += 1
+
+    return f'Book with id:{book_id} was not found'
 
 @app.delete('/{book_id}')
-async def delete_book(book_id):
-    del BOOKS[book_id]
-    return f'{book_id} has been deleted.'
+async def delete_book(book_id: UUID):
+    i = 0
+    for b in BOOKS:
+        if b.id == book_id:
+            del BOOKS[i]
+            return f'Book with id:{book_id} has been deleted.'
+
+    return f'Book with id:{book_id} was not found'
+    
+    
