@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from typing import Optional
 from uuid import UUID
 from models import Directions, Book
+from utils import not_found
 
 app = FastAPI()
 
@@ -38,7 +39,7 @@ async def get_book(book_id : UUID):
         if b.id == book_id:
             return b
 
-    return f'Book with id:{book_id} was not found.'
+    raise not_found(book_id)
         
 
 @app.get("directions/{name}")
@@ -74,7 +75,7 @@ async def update_book(book_id: UUID, book: Book):
             return BOOKS[i]
         i += 1
 
-    return f'Book with id:{book_id} was not found'
+    raise not_found(book_id)
 
 @app.delete('/{book_id}')
 async def delete_book(book_id: UUID):
@@ -83,7 +84,8 @@ async def delete_book(book_id: UUID):
         if b.id == book_id:
             del BOOKS[i]
             return f'Book with id:{book_id} has been deleted.'
+            
+    raise not_found(book_id)
 
-    return f'Book with id:{book_id} was not found'
-    
+
     
