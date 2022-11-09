@@ -3,7 +3,7 @@ from starlette.responses import JSONResponse
 from typing import Optional
 from uuid import UUID
 
-from models import Directions, Book
+from models import Directions, Book, BookNoRating
 from utils import not_found
 
 class NegativeNumberException(Exception):
@@ -54,6 +54,15 @@ async def read_book(book_id : UUID):
             return b
 
     raise not_found(book_id)
+
+@app.get("/book/rating/{book_id}", response_model=BookNoRating)
+async def read_book_no_rating(book_id: UUID):
+    for b in BOOKS:
+        if b.id == book_id:
+            return b
+
+    raise not_found(book_id)
+
 
 @app.get("/books/")
 async def read_books(books_to_return: Optional[int] = None):
