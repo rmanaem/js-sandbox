@@ -40,19 +40,18 @@ async def get_book(book_id : UUID):
             return b
 
     raise not_found(book_id)
-        
 
-@app.get("directions/{name}")
-async def get_direction(name: Directions):
-    if name == Directions.north:
-        return {"Direction": name, "sub": 'Up'}
-    if name == Directions.south:
-        return {"Direction": name, "sub": 'Down'}
-    if name == Directions.east:
-        return {"Direction": name, "sub": 'Right'}
-    if name == Directions.west:
-        return {"Direction": name, "sub": 'Left'}
+@app.get("/books/")
+async def get_books(books_to_return: Optional[int] = None):
+    if books_to_return and len(BOOKS) >= books_to_return > 0:
+        i = 0
+        new_books = []
+        while i < books_to_return:
+            new_books.append(BOOKS[i])
+            i += 1
+        return new_books
 
+    return BOOKS
 
 @app.post("/")
 async def create_book(book: Book):
@@ -80,5 +79,16 @@ async def delete_book(book_id: UUID):
             
     raise not_found(book_id)
 
+
+@app.get("directions/{name}")
+async def get_direction(name: Directions):
+    if name == Directions.north:
+        return {"Direction": name, "sub": 'Up'}
+    if name == Directions.south:
+        return {"Direction": name, "sub": 'Down'}
+    if name == Directions.east:
+        return {"Direction": name, "sub": 'Right'}
+    if name == Directions.west:
+        return {"Direction": name, "sub": 'Left'}
 
     
