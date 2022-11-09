@@ -1,10 +1,24 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, Request
+from starlette.responses import JSONResponse
 from typing import Optional
 from uuid import UUID
+
 from models import Directions, Book
 from utils import not_found
 
+class NegativeNumberException(Exception):
+    def __init__(self, books_to_return):
+        self.books_to_return = books_to_return
+
 app = FastAPI()
+
+@app.exception_handler(NegativeNumberException)
+async def negative_number_exception_handler(request: Request, exception: NegativeNumberException):
+    return JSONResponse(
+        status_code=418,
+        content={"message": f'Negative number of books do not exist.'}
+    )
+
 
 BOOKS = [
     Book(id="71f4c2ea-1340-41f4-89f7-2852347bb0d1",
@@ -43,6 +57,9 @@ async def get_book(book_id : UUID):
 
 @app.get("/books/")
 async def get_books(books_to_return: Optional[int] = None):
+    if books_to_return and books_to_return < 0:
+        raise NegativeNumberException(books_to_return)
+    
     if books_to_return and len(BOOKS) >= books_to_return > 0:
         i = 0
         new_books = []
