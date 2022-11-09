@@ -44,11 +44,11 @@ BOOKS = [
 ]
 
 @app.get("/")
-async def get_all_books():
+async def read_all_books():
     return BOOKS
 
 @app.get("/book/{book_id}")
-async def get_book(book_id : UUID):
+async def read_book(book_id : UUID):
     for b in BOOKS:
         if b.id == book_id:
             return b
@@ -56,7 +56,7 @@ async def get_book(book_id : UUID):
     raise not_found(book_id)
 
 @app.get("/books/")
-async def get_books(books_to_return: Optional[int] = None):
+async def read_books(books_to_return: Optional[int] = None):
     if books_to_return and books_to_return < 0:
         raise NegativeNumberException(books_to_return)
     
@@ -98,7 +98,7 @@ async def delete_book(book_id: UUID):
 
 
 @app.get("directions/{name}")
-async def get_direction(name: Directions):
+async def read_direction(name: Directions):
     if name == Directions.north:
         return {"Direction": name, "sub": 'Up'}
     if name == Directions.south:
