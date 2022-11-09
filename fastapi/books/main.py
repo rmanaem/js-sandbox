@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Request, status
+from fastapi import FastAPI, HTTPException, Request, status, Form, Header
 from starlette.responses import JSONResponse
 from typing import Optional
 from uuid import UUID
@@ -10,7 +10,9 @@ class NegativeNumberException(Exception):
     def __init__(self, books_to_return):
         self.books_to_return = books_to_return
 
+
 app = FastAPI()
+
 
 @app.exception_handler(NegativeNumberException)
 async def negative_number_exception_handler(request: Request, exception: NegativeNumberException):
@@ -43,9 +45,11 @@ BOOKS = [
                   rating=90)
 ]
 
+
 @app.get("/")
 async def read_all_books():
     return BOOKS
+
 
 @app.get("/book/{book_id}")
 async def read_book(book_id : UUID):
@@ -55,6 +59,7 @@ async def read_book(book_id : UUID):
 
     raise not_found(book_id)
 
+
 @app.get("/book/rating/{book_id}", response_model=BookNoRating)
 async def read_book_no_rating(book_id: UUID):
     for b in BOOKS:
@@ -62,6 +67,11 @@ async def read_book_no_rating(book_id: UUID):
             return b
 
     raise not_found(book_id)
+
+
+@app.get("/header")
+async def read_header(header: Optional[str] = Header(None)):
+    return {"header": header}
 
 
 @app.get("/books/")
@@ -79,10 +89,17 @@ async def read_books(books_to_return: Optional[int] = None):
 
     return BOOKS
 
+
 @app.post("/", status_code=status.HTTP_201_CREATED)
 async def create_book(book: Book):
     BOOKS.append(book)
     return book
+
+
+@app.post("/books/login")
+async def login(username: str = Form(), password: str = Form()):
+    return {"username": username, "password": password}
+
 
 @app.put("/{book_id}")
 async def update_book(book_id: UUID, book: Book):
@@ -94,6 +111,7 @@ async def update_book(book_id: UUID, book: Book):
         i += 1
 
     raise not_found(book_id)
+
 
 @app.delete('/{book_id}')
 async def delete_book(book_id: UUID):
@@ -116,5 +134,6 @@ async def read_direction(name: Directions):
         return {"Direction": name, "sub": 'Right'}
     if name == Directions.west:
         return {"Direction": name, "sub": 'Left'}
+
 
     
