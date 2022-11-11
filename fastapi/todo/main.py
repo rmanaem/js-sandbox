@@ -45,7 +45,7 @@ async def create_todo(todo: Todo, db: Session = Depends(get_db)):
         "transaction" : "Successful"
     }
 
-@app.put("/")
+@app.put("/{todo_id}")
 async def update_todo(todo_id: int, todo: Todo, db: Session = Depends(get_db)):
     todo_model = db.query(Todos).filter(Todos.id == todo_id).first()
     if todo_model:
