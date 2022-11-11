@@ -65,3 +65,16 @@ async def update_todo(todo_id: int, todo: Todo, db: Session = Depends(get_db)):
     raise not_found(todo_id)
     
     
+@app.delete("/{todo_id}")
+async def delete_todo(todo_id: int, db: Session = Depends(get_db)):
+    todo_model = db.query(Todos).filter(Todos.id == todo_id).first()
+    if todo_model:
+        db.query(Todos).filter(Todos.id == todo_id).delete()
+        db.commit()
+
+        return {
+            "status": 201,
+            "transaction" : "Successful"
+        } 
+
+    raise not_found(todo_id)
