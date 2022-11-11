@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from models import Todos, Todo, Base
 from database import engine, SessionLocal
-from utils import not_found
+from utils import not_found, successful_response
 
 
 app = FastAPI()
@@ -40,10 +40,7 @@ async def create_todo(todo: Todo, db: Session = Depends(get_db)):
     db.add(todo_model)
     db.commit()
 
-    return {
-        "status" : 201,
-        "transaction" : "Successful"
-    }
+    return successful_response(201)
 
 @app.put("/{todo_id}")
 async def update_todo(todo_id: int, todo: Todo, db: Session = Depends(get_db)):
@@ -57,10 +54,7 @@ async def update_todo(todo_id: int, todo: Todo, db: Session = Depends(get_db)):
         db.add(todo_model)
         db.commit()
 
-        return {
-            "status": 201,
-            "transaction" : "Successful"
-        }
+        return successful_response(201)
     
     raise not_found(todo_id)
     
@@ -72,9 +66,6 @@ async def delete_todo(todo_id: int, db: Session = Depends(get_db)):
         db.query(Todos).filter(Todos.id == todo_id).delete()
         db.commit()
 
-        return {
-            "status": 201,
-            "transaction" : "Successful"
-        } 
+        return successful_response(201)
 
     raise not_found(todo_id)
