@@ -34,3 +34,10 @@ class Todo(BaseModel):
     priority: int = Field(gt=0, lt=6, description="The priority must be between 1-5")
     complete: bool
 
+
+class User(BaseModel):
+    username: str
+    email: Optional[str]
+    first_name: str
+    last_name: str
+    password: str
