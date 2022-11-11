@@ -1,12 +1,21 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
+from sqlalchemy.orm import Session
 
 import models
-from database import engine
+from database import engine, SessionLocal
+
 
 app = FastAPI()
 
 models.Base.metadata.create_all(bind=engine)
 
+def get_db():
+    try:
+        db = SessionLocal()
+        yield db
+    finally:
+        db.close()
+
 @app.get("/")
-async def create_database():
-    return "Data base is created"
+async def read_all(db: Session = Depends(get_db)):
+    return db.query(models.Todos).all()
