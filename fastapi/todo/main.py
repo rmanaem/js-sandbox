@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 
 from models import Todos, Todo, Base
 from database import engine, SessionLocal
+from auth import get_current_user, get_user_exception
 
 
 app = FastAPI()
@@ -26,7 +27,16 @@ async def read_todo(todo_id: int, db: Session = Depends(get_db)):
     todo_model = db.query(Todos).filter(Todos.id == todo_id).first()
     if todo_model:
         return todo_model
+
     raise todo_not_found_exception(todo_id)
+
+@app.get("/todos/user")
+async def read_all_by_user(user: dict = Depends(get_current_user), db: Session = Depends(get_db)):
+    if user:
+        return db.query(Todos).filter(Todos.owner_id == user.get("id")).all()
+
+    raise get_user_exception()
+
 
 @app.post("/")
 async def create_todo(todo: Todo, db: Session = Depends(get_db)):
