@@ -13,6 +13,7 @@ from jose import jwt, JWTError
 from models import Users, User
 from database import SessionLocal, engine, Base
 
+
 SECRET_KEY = "hsafowhshfaownfoasfnouwtbg"
 ALGORITHM = "HS256"
 
