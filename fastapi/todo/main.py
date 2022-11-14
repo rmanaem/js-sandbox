@@ -3,7 +3,6 @@ from sqlalchemy.orm import Session
 
 from models import Todos, Todo, Base
 from database import engine, SessionLocal
-from utils import not_found, successful_response
 
 
 app = FastAPI()
@@ -27,7 +26,7 @@ async def read_todo(todo_id: int, db: Session = Depends(get_db)):
     todo_model = db.query(Todos).filter(Todos.id == todo_id).first()
     if todo_model:
         return todo_model
-    raise not_found(todo_id)
+    raise todo_not_found_exception(todo_id)
 
 @app.post("/")
 async def create_todo(todo: Todo, db: Session = Depends(get_db)):
@@ -56,7 +55,7 @@ async def update_todo(todo_id: int, todo: Todo, db: Session = Depends(get_db)):
 
         return successful_response(201)
     
-    raise not_found(todo_id)
+    raise todo_not_found_exception(todo_id)
     
     
 @app.delete("/{todo_id}")
@@ -68,4 +67,15 @@ async def delete_todo(todo_id: int, db: Session = Depends(get_db)):
 
         return successful_response(201)
 
-    raise not_found(todo_id)
+    raise todo_not_found_exception(todo_id)
+
+
+# Exceptions
+def todo_not_found_exception(todo_id: int):
+    return HTTPException(status_code=404, detail=f"Todo with id:{todo_id} was not found.")
+
+def successful_response(status_code: int):
+    return {
+        "status": status_code,
+        "transaction": "Successful"
+    }
