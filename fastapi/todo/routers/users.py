@@ -61,4 +61,21 @@ async def user_password_change(user_verification: UserVerification, user: dict =
             return "Invalid user or request"
     
     raise get_user_exception()
+
+
+@router.delete("/user")
+async def delete_user(user: dict = Depends(get_current_user), db: Session = Depends(get_db)):
+    if user:
+        user_model = db.query(Users).filter(Users.id == user.get("id")).first()
+        if user_model:
+            db.query(Users).filter(Users.id == user_model.id).delete()
+
+            db.commit()
+
+            return successful_response(204)
+        
+        else:
+            return "Invalid user or request"
+
+    raise get_user_exception()
     
