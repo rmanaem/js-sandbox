@@ -42,3 +42,9 @@ class User(BaseModel):
     first_name: str
     last_name: str
     password: str
+
+
+class UserVerification(BaseModel):
+    username: str
+    password: str
+    new_password: str
