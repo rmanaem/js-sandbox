@@ -82,7 +82,7 @@ async def update_todo(todo_id: int, todo: Todo, user: dict = Depends(get_current
         db.add(todo_model)
         db.commit()
 
-        return successful_response(202)
+        return successful_response(204)
     
     raise todo_not_found_exception(todo_id)
     
