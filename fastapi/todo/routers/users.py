@@ -25,7 +25,7 @@ async def read_all(db: Session = Depends(get_db)):
 
 
 @router.get("/user/{user_id}")
-async def user_by_path(user_id: str, db: Session = Depends(get_db)):
+async def user_by_path(user_id: int, db: Session = Depends(get_db)):
     user_model = db.query(Users).filter(Users.id == user_id).first()
     if user_model:
         return user_model
@@ -33,3 +33,10 @@ async def user_by_path(user_id: str, db: Session = Depends(get_db)):
     return f"User id:{user_id} is invalid"
 
 
+@router.get("/user/")
+async def user_by_query(user_id: int, db: Session = Depends(get_db)):
+    user_model = db.query(Users).filter(Users.id == user_id).first()
+    if user_model:
+        return user_model
+
+    return f"User id:{user_id} is invalid"
