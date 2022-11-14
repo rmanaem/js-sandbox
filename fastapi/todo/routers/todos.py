@@ -9,7 +9,11 @@ from database import engine, SessionLocal
 from .auth import get_current_user, get_user_exception
 
 
-router = APIRouter()
+router = APIRouter(
+    prefix="/todos",
+    tags=["todos"],
+    responses={404: {"description": "Not found"}}
+)
 
 Base.metadata.create_all(bind=engine)
 
@@ -26,7 +30,7 @@ async def read_all(db: Session = Depends(get_db)):
     return db.query(Todos).all()
 
 
-@router.get("/todo/{todo_id}")
+@router.get("/{todo_id}")
 async def read_todo(todo_id: int, user: dict = Depends(get_current_user), db: Session = Depends(get_db)):
     if user is None:
         raise get_user_exception()
@@ -38,7 +42,7 @@ async def read_todo(todo_id: int, user: dict = Depends(get_current_user), db: Se
     raise todo_not_found_exception(todo_id)
 
 
-@router.get("/todos/user")
+@router.get("/user")
 async def read_all_by_user(user: dict = Depends(get_current_user), db: Session = Depends(get_db)):
     if user:
         return db.query(Todos).filter(Todos.owner_id == user.get("id")).all()
