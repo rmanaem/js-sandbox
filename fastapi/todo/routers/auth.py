@@ -85,7 +85,6 @@ async def create_user(new_user: User, db: Session = Depends(get_db)):
     user_model.username = new_user.username
     user_model.first_name = new_user.first_name
     user_model.last_name = new_user.last_name
-
     user_model.hash_password = get_password_hash(new_user.password)
     user_model.is_active = True
 
