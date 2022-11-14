@@ -3,12 +3,14 @@ from sqlalchemy.orm import Session
 
 from models import Todos, Todo, Base
 from database import engine, SessionLocal
-from auth import get_current_user, get_user_exception
+from routers.auth import get_current_user, get_user_exception, router
 
 
 app = FastAPI()
 
 Base.metadata.create_all(bind=engine)
+
+app.include_router(router)
 
 def get_db():
     try:
