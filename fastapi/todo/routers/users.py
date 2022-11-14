@@ -1,6 +1,3 @@
-import sys
-sys.path.append("..")
-
 from fastapi import Depends, APIRouter
 from sqlalchemy.orm import Session
 from pydantic import BaseModel

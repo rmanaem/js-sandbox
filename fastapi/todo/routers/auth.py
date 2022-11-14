@@ -1,6 +1,3 @@
-import sys
-sys.path.append("..")
-
 from fastapi import Depends, HTTPException, status, APIRouter
 from pydantic import BaseModel
 from typing import Optional
