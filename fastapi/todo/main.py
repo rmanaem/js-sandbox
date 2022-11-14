@@ -23,12 +23,16 @@ async def read_all(db: Session = Depends(get_db)):
 
 
 @app.get("/todo/{todo_id}")
-async def read_todo(todo_id: int, db: Session = Depends(get_db)):
-    todo_model = db.query(Todos).filter(Todos.id == todo_id).first()
+async def read_todo(todo_id: int, user: dict = Depends(get_current_user), db: Session = Depends(get_db)):
+    if user is None:
+        raise get_user_exception()
+
+    todo_model = db.query(Todos).filter(Todos.id == todo_id).filter(Todos.owner_id == user.get("id")).first()
     if todo_model:
         return todo_model
 
     raise todo_not_found_exception(todo_id)
+
 
 @app.get("/todos/user")
 async def read_all_by_user(user: dict = Depends(get_current_user), db: Session = Depends(get_db)):
