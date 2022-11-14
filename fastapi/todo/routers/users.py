@@ -46,17 +46,19 @@ async def user_by_query(user_id: int, db: Session = Depends(get_db)):
 
 @router.put("/user/password")
 async def user_password_change(user_verification: UserVerification, user: dict = Depends(get_current_user), db: Session = Depends(get_db)):
-    if user is None:
-        raise get_user_exception()
+    if user:
+        user_model = db.query(Users).filter(Users.id == user.get("id")).first()
+        if user_model:
+            if user_verification.username == user_model.username and bcrypt_context.verify(user_verification.password, user_model.hash_password):
+                user_model.hash_password = get_password_hash(user_verification.new_password)
 
-    user_model = db.query(Users).filter(Users.id == user.get("id")).first()
-    if user_model:
-        if user_verification.username == user_model.username and bcrypt_context.verify(user_verification.password, user_model.hash_password):
-            user_model.hash_password = get_password_hash(user_verification.new_password)
+                db.add(user_model)
+                db.commit()
 
-            db.add(user_model)
-            db.commit()
+                return successful_response(204)
 
-            return successful_response(204)
+        else:
+            return "Invalid user or request"
     
-    return "Invalid user or request"
+    raise get_user_exception()
+    
