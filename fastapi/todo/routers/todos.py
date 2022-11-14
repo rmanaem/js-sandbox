@@ -82,7 +82,7 @@ async def update_todo(todo_id: int, todo: Todo, user: dict = Depends(get_current
         db.add(todo_model)
         db.commit()
 
-        return successful_response(201)
+        return successful_response(202)
     
     raise todo_not_found_exception(todo_id)
     
@@ -97,7 +97,7 @@ async def delete_todo(todo_id: int, user: dict = Depends(get_current_user), db: 
         db.query(Todos).filter(Todos.id == todo_id).delete()
         db.commit()
 
-        return successful_response(201)
+        return successful_response(204)
 
     raise todo_not_found_exception(todo_id)
 
